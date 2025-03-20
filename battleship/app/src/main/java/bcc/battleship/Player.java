@@ -1,40 +1,59 @@
 package bcc.battleship;
 import bcc.battleship.Constants;
 
-public class Player {
-  
-    // Constructor: Initialize the grids and the ships.
-    public Player() {
-
-    }
+public class Player
+{
+    // These are the lengths of all of the ships.
+    private static final int[] SHIP_LENGTHS = {2, 3, 3, 4, 5};
+    private static final int NUM_OF_SHIPS = 5;
     
-    /**
-     * This method is used for testing to set a ship's location.
-     * It sets the ship's row, column, and direction, then adds it to the player's grid.
-     *
-     */
+    public Ship[] ships;
+    public Grid playerGrid;
+    public Grid oppGrid;
     
-    public boolean chooseShipLocation(int index, int row, int col, int direction) {
+    public Player()
+    {
+        if (NUM_OF_SHIPS != 5) // Num of ships must be 5
+        {
+            throw new IllegalArgumentException("ERROR! Num of ships must be 5");
+        }
         
-        return false;
-    }
-   
-    /**
-     * Record a guess from the opponent.
-     * This method checks the player's grid at (row, col). If there is a ship,
-     * it marks a hit and returns true; otherwise, it marks a miss and returns false.
-     *
-     */
-    public boolean recordOpponentGuess(int row, int col) {
-        return false;
+        ships = new Ship[NUM_OF_SHIPS];
+        for (int i = 0; i < NUM_OF_SHIPS; i++)
+        {
+            Ship tempShip = new Ship(SHIP_LENGTHS[i]);
+            ships[i] = tempShip;
+        }
+        
+        playerGrid = new Grid();
+        oppGrid = new Grid();
     }
     
-    
-    public Grid getMyGrid() {
-        return null;
+    public void addShips()
+    {
+        for (Ship s: ships)
+        {
+            playerGrid.addShip(s);
+        }
     }
     
-    public Grid getOpponentGrid() {
-        return null;
+    public int numOfShipsLeft()
+    {
+        int counter = 5;
+        for (Ship s: ships)
+        {
+            if (s.isLocationSet() && s.isDirectionSet())
+                counter--;
+        }
+        
+        return counter;
+        
+    }
+    
+    public void chooseShipLocation(Ship s, int row, int col, int direction)
+    {
+        s.setLocation(row, col);
+        s.setDirection(direction);
+        playerGrid.addShip(s);
     }
 }
